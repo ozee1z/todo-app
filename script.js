@@ -2,12 +2,39 @@ const todoInput = document.getElementById('todoInput');
 const addBtn = document.getElementById('addBtn');
 const todoList = document.getElementById('todoList');
 const emptyMessage = document.getElementById('emptyMessage');
+const themeToggle = document.getElementById('themeToggle');
 
 // Load todos from localStorage
 let todos = JSON.parse(localStorage.getItem('todos')) || [];
 
-// Render todos on page load
-document.addEventListener('DOMContentLoaded', renderTodos);
+// Initialize theme on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    renderTodos();
+});
+
+// Theme toggle functionality
+themeToggle.addEventListener('click', toggleTheme);
+
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    updateThemeButton();
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    updateThemeButton();
+}
+
+function updateThemeButton() {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+}
 
 // Add todo on button click
 addBtn.addEventListener('click', addTodo);
